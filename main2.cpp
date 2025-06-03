@@ -6,6 +6,7 @@ int main() {
     int saidaV;
     char tipoVeiculo;
     double c = 0, m = 0;
+    bool estacionamentoAberto = false; 
 
     do {
         cout << "\nBEM VINDO AO ESTACIONAMENTO" << endl;
@@ -18,8 +19,12 @@ int main() {
         cin >> opcao;
 
         if (opcao == 1) {
-            int placaRepetida = -1;
+            if(!estacionamentoAberto){
+                cout << "Estacionamento fechado, nao eh possivel registrar veiculos.\n";
+                continue;
+            }
 
+            int placaRepetida = -1;
             cout << "O veiculo eh uma moto(m) ou um carro(c): ";
             cin >> tipoVeiculo;
 
@@ -32,7 +37,6 @@ int main() {
             cout << "Digite a placa do veiculo (apenas os numeros): ";
             cin >> placa;
 
-            // Verifica se a placa já está registrada
             for (int i = 0; i < 6; i++) {
                 if (vagas[i] == placa) {
                     placaRepetida = i;
@@ -60,6 +64,11 @@ int main() {
             }
 
         } else if (opcao == 2) {
+            if(!estacionamentoAberto){
+                cout << "Estacionamento fechado, nao eh possivel registrar veiculos.\n";
+                continue;
+            }
+
             cout << "Digite a placa do veiculo: ";
             cin >> saidaV;
 
@@ -79,6 +88,11 @@ int main() {
             }
 
         } else if (opcao == 3) {
+                       if(!estacionamentoAberto){
+                cout << "Estacionamento fechado, nao eh possivel registrar veiculos.\n";
+                continue;
+            }
+
             cout << "\nVeiculos guardados nas vagas:\n";
             for (int i = 0; i < 6; i++) {
                 cout << "Vaga " << (i + 1) << ": ";
@@ -89,14 +103,31 @@ int main() {
                 }
             }
 
-        } else if (opcao == 4) {
+       } else if (opcao == 4) {
+    if (estacionamentoAberto) {
+        // Tentar fechar
+        bool temVeiculos = false;
+        for (int i = 0; i < 6; i++) {
+            if (vagas[i] != 0) {
+                temVeiculos = true;
+                break;
+            }
+        }
+
+        if (temVeiculos) {
+            cout << "Nao eh possivel fechar o estacionamento pois ha veiculos estacionados.\n";
+        } else {
+            estacionamentoAberto = false;
             cout << "\nFechando estacionamento...\n";
             cout << "Total de carros: " << c << endl;
             cout << "Total de motos: " << m << endl;
-
-        } else if (opcao != 0) {
-            cout << "Opcao invalida. Tente novamente.\n";
         }
+    } else {
+        estacionamentoAberto = true;
+        cout << "Estacionamento ABERTO com sucesso. Tenha um bom dia!\n";
+    }
+}
+
 
     } while (opcao != 0);
 
